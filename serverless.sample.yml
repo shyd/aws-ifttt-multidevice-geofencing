@@ -1,0 +1,42 @@
+service:
+  name: aws-lambda-with-dynamo-db
+
+# Add the serverless-webpack plugin
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: eu-central-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+      Resource: "arn:aws:dynamodb:eu-central-1:YOURID:table/geofences"
+
+functions:
+  addGefenceState:
+    handler: handler.addGefenceState
+    events:
+      - http:
+          method: post
+          path: add-geofence-state
+          cors: true
+  getGefenceState:
+    handler: handler.getGefenceState
+    events:
+      - http:
+          method: get
+          path: get-geofence-state/{id}
+          cors: true
+
+resources:
+  # DynamoDB
+  - ${file(resources/dynamodb-table.yml)}

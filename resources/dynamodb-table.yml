@@ -1,0 +1,15 @@
+Resources:
+  GeofencesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: geofences
+      AttributeDefinitions:
+        - AttributeName: user
+          AttributeType: S
+      KeySchema:
+        - AttributeName: user
+          KeyType: HASH
+      # Set the capacity
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
